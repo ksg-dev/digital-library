@@ -20,14 +20,14 @@ all_books = []
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('index.html', library=all_books)
 
 
 @app.route('/add', methods=["GET", "POST"])
 def add():
     if request.method == "POST":
-        title = request.form["title"]
-        author = request.form["author"]
+        title = request.form["title"].title()
+        author = request.form["author"].title()
         rating = request.form["rating"]
         new_book = {
             "title": title,
