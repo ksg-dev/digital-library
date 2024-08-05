@@ -1,22 +1,15 @@
 <!DOCTYPE html>
-<html lang = "en">
-   <head></head>
-   <body>
-
-      <h3>
-         <a href = "{{ url_for('home') }}">Comments - Flask
-            SQLAlchemy example</a>
-      </h3>
-
-      <hr/>
-      {%- for message in get_flashed_messages() %}
-         {{ message }}
-      {%- endfor %}
-
-      <h3>Books (<a href = "{{ url_for('add') }}">Add Book
-         </a>)</h3>
-
-      <table>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Library</title>
+  </head>
+  <body>
+    <h1>My Library</h1>
+    {% if not library %}
+    <p>Library is empty. Click below to add a book.</p>
+    {% else %}
+    <table>
          <thead>
             <tr>
                <th>Title</th>
@@ -35,6 +28,7 @@
             {% endfor %}
          </tbody>
       </table>
-
-   </body>
+    {% endif %}
+    <a href="{{ url_for('add') }}">Add New Book</a>
+  </body>
 </html>

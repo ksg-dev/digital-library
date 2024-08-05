@@ -24,16 +24,16 @@ class Base(DeclarativeBase):
 app = Flask(__name__)
 app.app_context().push()
 # configure the SQLite database, relative to the app instance folder
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///library.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///collection.db"
 
 db = SQLAlchemy(app)
 # # initialize the app with the extension
 # db.init_app(app)
 
 # Create table
-class Library(db.Model):
+class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(250), unique=True, nullable=False)
+    title = db.Column(db.String(250), nullable=False)
     author = db.Column(db.String(250), nullable=False)
     rating = db.Column(db.Float, nullable=False)
 
@@ -45,18 +45,19 @@ class Library(db.Model):
 
 all_books = []
 
-
-db.create_all()
+with app.app_context():
+    db.create_all()
 
 # CREATE RECORD
-new_book = Library(title="Harry Potter", author="J.K. Rowling", rating=9.3)
-db.session.add(new_book)
-db.session.commit()
+with app.app_context():
+    new_book = Book(title="Harry Potter 2", author="J.K. Rowling", rating=9.3)
+    db.session.add(new_book)
+    db.session.commit()
 
 
 @app.route('/')
 def home():
-    return render_template('show_all.html', library = library.query.all())
+    return render_template('show_all.html', library=Book.query.all())
 
 
 @app.route('/add', methods=["GET", "POST"])
