@@ -16,7 +16,26 @@ pip3 install -r requirements.txt
 This will install the packages from requirements.txt for this project.
 '''
 
+
+class Base(DeclarativeBase):
+    pass
+
+
+db = SQLAlchemy(model_class=Base)
+
 app = Flask(__name__)
+# configure the SQLite database, relative to the app instance folder
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
+# initialize the app with the extension
+db.init_app(app)
+
+
+class Books(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    title: Mapped[str] = mapped_column(unique=True, nullable=False)
+    author: Mapped[str] = mapped_column(nullable=False)
+    rating: Mapped[float] = mapped_column(nullable=False)
+
 
 all_books = []
 
